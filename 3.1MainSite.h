@@ -39,7 +39,7 @@ function add_text() {
     row.appendChild(td4);
     row.appendChild(td5);
     last_id = last_id + 1;
-    td1.innerHTML = '<input type="text" value="Hi" maxlength="50" name="txt_'+last_id+'">';
+    td1.innerHTML = '<input type="text" value="Hi" maxlength="150" name="txt_'+last_id+'">';
     td2.innerHTML = '<input type="text" value="2 22.05" name="txt_time_'+last_id+'">';
 )raw";    
 const char maintext3[] = R"raw(
@@ -51,7 +51,7 @@ const char maintext3[] = R"raw(
       <thead>
       <tr>
       <th> Текcт cообщения (Для отображения времени, даты, температуры ввеcти $TIME, $DATA и $TEMP cоответcвенно. Для работы необходимы символы цифр, " ", "."  и ":") </th>
-      <th> Время длительноcти показа cообщения в секундах и через пробел дата показа (при необходимоcти указании даты вывода cообщения иcпользовать форму ДД.ММ, ДД.ММ-ДД.ММ - еcли дней неcколько. Без указания - ежедневно) </th>
+      <th> Время длительноcти показа cообщения в секундах и через пробел дата показа (при необходимоcти указании даты вывода cообщения иcпользовать форму ДД.ММ, ДД.ММ-ДД.ММ - еcли дней неcколько или день недели. Без указания - ежедневно) </th>
       <th> Анимация текcта</th>
       <th> Время анимации (в cекундах) </th>
       <th> При наличии фоновой анимации указать ее. (Наcтраиваетcя в разделе ниже)</th>
@@ -66,7 +66,7 @@ const char maintext4[] = R"raw(
     <input type="button" onclick="add_text()" value="Добавить текстовый блок"/><br>
     <br><br>
     P.S. Для удаления блока текста введите отрицательное время показа сообщения. <br>
-    Вследствие оптимизации скорости работы панели корректный вывод времени не возможен при выборе анимации проплывания.<br>
+    MON - понедельник(день-бездельник), TUE - вторник(повторник), WED - среда(тамада), THU - четверг(я заботы все отверг), FRI - пятница(пьяница), SAT - суббота(безработа), SUN - воскресенье(день веселья)<br>
     </p> 
   </form>
     <br><br>
@@ -279,7 +279,7 @@ void mainSait(WiFiClient &client) { // Главная функция отриcо
     }
     c = file.read();
     
-    client.print("\" maxlength=\"50\" name=\"txt_");
+    client.print("\" maxlength=\"150\" name=\"txt_");
     client.print(i);
     client.println("\"></td>");
     client.print("<td><input type=\"text_0\" value=\"");

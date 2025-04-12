@@ -33,7 +33,6 @@ void setTextFrom() {
       return;
     }
 
-
     if (use_second_array) {
       dataFromSend[0] = bykovka.bitMap[num_bits];
     }
@@ -41,13 +40,13 @@ void setTextFrom() {
       dataFromSend2[0] = bykovka.bitMap[num_bits];
     }
 
-
     num_bits--;
     if (num_bits < 0) {
-      while (!load_next_simvol() && num_byk <= blok_teksta.leng && num_byk >= 0) {};
+      while (num_byk >= -1 && !load_next_simvol()) {};
     }
 
   }
+
   else if (blok_teksta.anim == 4) {
     for (int i = 0; i < WIGHT * 32 - 1; i++) {
       if (use_second_array) {
@@ -89,19 +88,19 @@ void setTextFrom() {
 }
 
 
-void set_anim_interv() {
+bool set_anim_interv() {
   endAnim = 0;
 
   byte txt_l = blok_teksta.leng;
   char* text = new char[txt_l];
   for (int i = 0; i < txt_l; i++) text[i] = blok_teksta.text[i];
 
-  if (!use_second_array) {
-    for (int i = 0; i < WIGHT * 32; i++) dataFromSend[i] = 0;
-  }
-  else {
-    for (int i = 0; i < WIGHT * 32; i++) dataFromSend2[i] = 0;
-  }
+    if (!use_second_array) {
+      for (int i = 0; i < WIGHT * 32; i++) dataFromSend[i] = 0;
+    }
+    else {
+      for (int i = 0; i < WIGHT * 32; i++) dataFromSend2[i] = 0;
+    }
 
   for (int i = 0; i < txt_l; i++) { // Замена переменных на их числовые значения
     if (text[i] == '$') { // Обработчик служебных блоков
@@ -159,13 +158,20 @@ void set_anim_interv() {
   if (blok_teksta.anim == 4) num_byk = 0;
   else num_byk = blok_teksta.leng - 1;
 
-  load_next_simvol();
+  while (num_byk >= 0 && num_byk < txt_l && !load_next_simvol()) {
+
+  };
+
+  if (num_byk < -1 || num_byk > txt_l) {
+    endAnim = WIGHT * 32;
+    blok_teksta.text_time = 0;
+    return 0;
+  }
+  return 1;
 }
 
 
 bool load_next_simvol() {
-
-
   char a = 0;
   char b = blok_teksta.text[num_byk];
 
@@ -175,9 +181,9 @@ bool load_next_simvol() {
     b = blok_teksta.text[num_byk];
   }
 
-  if (blok_teksta.anim == 5 && num_byk > 0 && blok_teksta.text[num_byk - 1] >= 0x80) {
+  if (blok_teksta.anim == 5 && (b & 0b11000000) == 0b10000000 ) {
+    a = blok_teksta.text[num_byk - 1];
     num_byk--;
-    a = blok_teksta.text[num_byk];
   }
 
   if (blok_teksta.anim == 4) num_byk++;

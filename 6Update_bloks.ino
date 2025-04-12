@@ -49,7 +49,12 @@ tyda:
     if (blok_teksta.anim != -1) anim_playing = 1;
     timer = millis();
 
-    if (blok_teksta.anim == 4 || blok_teksta.anim == 5) set_anim_interv();
+    if (blok_teksta.anim == 4 || blok_teksta.anim == 5){
+      if(!set_anim_interv()){
+        anim_playing = 0;
+        up_bloks();
+      }
+    }
   }
 
   if (dsdt.tick()) {
